@@ -14,18 +14,22 @@ const io = socketIO(server)
 app.use(express.static(publicPath))
 
 io.on('connection', (socket) => {
+  /*
+    socket.emit - emits event to a single connection
+    io.emit - emits event to every single connection
+  */
   console.log('new user connected')
-
-  // Sends a message TO the client
-  socket.emit('newMessage', {
-    from: 'asdf@test.com',
-    text: 'Sending a message from the server',
-    createdAt: new Date()
-  })
 
   // handles created message FROM the client
   socket.on('createMessage', (message) => {
-    console.log('created a message from the client', message)
+    //console.log('created a message from the client', message)
+
+    // Sends a message TO the client
+    io.emit('newMessage', {
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime()
+    })
   })
 
   socket.on('disconnect', () => {

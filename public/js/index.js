@@ -8,10 +8,10 @@ socket.on('connect', function() {
     we only want to emit the event when connected
   */
   // sends a message TO the server
-  socket.emit('createMessage', {
-    from: 'Miguel',
-    text: 'Creating a message from the client'
-  })
+  // socket.emit('createMessage', {
+  //   from: 'Miguel',
+  //   text: 'Creating a message from the client'
+  // })
 })
 
 // handles a new message FROM the server
