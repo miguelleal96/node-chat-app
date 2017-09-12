@@ -35,13 +35,13 @@ io.on('connection', (socket) => {
     // Sends a message TO all the clients connected
     io.emit('newMessage', generateMessage(message.from, message.text))
     // callback === Aknowledgement or the function provided on the emitter as the third argument
-    callback('This is from the server')
+    callback()
 
-    socket.on('createLocationMessage', (coords) => {
-      io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude))
-    }) 
   })
-
+  
+  socket.on('createLocationMessage', (coords) => {
+    io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude))
+  }) 
   socket.on('disconnect', () => {
     console.log('client disconnected')
   })
