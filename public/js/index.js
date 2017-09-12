@@ -1,42 +1,45 @@
 const socket = io()
 
-socket.on('connect', function() {
-  console.log('connected to server')
-  
-  /* 
-    event emiter inside 'connect' callback because
-    we only want to emit the event when connected
-  */
-  // sends a message TO the server
-  // socket.emit('createMessage', {
-  //   from: 'Miguel',
-  //   text: 'Creating a message from the client'
-  // })
-})
-
-// handles a new message FROM the server
-socket.on('newMessage', function(message) {
-  console.log('recieved a new message from the server', message)
-  const li = $('<li></li>')
-  li.text(`${message.from}: ${message.text}`)
-
-  $('#messages').append(li)
-})
-
+/* Socket Events */
+  socket.on('connect', function() {
+    console.log('connected to server')
+    
+    /* 
+      event emiter inside 'connect' callback because
+      we only want to emit the event when connected
+    */
+    // sends a message TO the server
+    // socket.emit('createMessage', {
+    //   from: 'Miguel',
+    //   text: 'Creating a message from the client'
+    // })
+  })
 socket.on('disconnect', function() {
   console.log('disconnected from server')
 })
 
+// handles a new message FROM the server
+socket.on('newMessage', function(message) {
+  const formattedTime = moment(message.createdAt).format('h:mm a')
+  const li = $('<li></li>')
+  li.text(`${message.from} ${formattedTime}: ${message.text}`)
+
+  $('#messages').append(li)
+})
+
 socket.on('newLocationMessage', function(message) {
+  const formattedTime = moment(message.createdAt).format('h:mm a')
   const li = $('<li></li>')
   const a = $('<a target="_blank">My Current Location</a>')
 
-  li.text(`${message.from}: `)
+  li.text(`${message.from} ${formattedTime}: `)
   a.attr('href', message.url)
   li.append(a)
   $('#messages').append(li)
 })
 
+
+/* jQuery Events */
 $('#message-form').on('submit', function(e) {
   e.preventDefault()
   const inputField = $('[name=message]')
@@ -45,9 +48,9 @@ $('#message-form').on('submit', function(e) {
     from: 'User',
     text: inputField.val()
   }, function() {
+    // Aknowledgement - allows event listener to send something back to the event emitter / callback to run after event finishes emitting
     inputField.val('')
   })
-  
 })
 
 const locationButton = $('#send-location')
@@ -71,10 +74,9 @@ locationButton.on('click', function() {
 })
 
 // socket.emit('createMessage', {
-//   from: 'Frank',
-//   text: 'hi'
-// }, function(data) { 
-//   // Aknowledgement - allows event listener to send something back to the event emitter
+  //   from: 'Frank',
+  //   text: 'hi'
+  // }, function(data) { 
 //   // data = argument passed into the 'callback' from the event handler
 //   console.log('Got it', data)
 // })
