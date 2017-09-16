@@ -1,8 +1,8 @@
-[{
-  id: '/sdfljisadf',
-  name: 'Miguel',
-  room: 'The Office Fans'
-}]
+// [{
+//   id: '/sdfljisadf',
+//   name: 'Miguel',
+//   room: 'The Office Fans'
+// }]
 
 // addUser(id, name, room)
 // removeUser(id)

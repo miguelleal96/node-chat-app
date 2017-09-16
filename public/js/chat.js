@@ -93,7 +93,6 @@ $('#message-form').on('submit', function(e) {
   const inputField = $('[name=message]')
   
   socket.emit('createMessage', {
-    from: 'User',
     text: inputField.val()
   }, function() {
     // Aknowledgement - allows event listener to send something back to the event emitter / callback to run after event finishes emitting
