@@ -17,27 +17,46 @@ function scrollToBottom() {
   const lastMessageHeight = newMessage.prev().innerHeight()
 
   if(Math.round(clientHeight + scrollTop + lastMessageHeight) === scrollHeight) {
-    console.log('scroll down1!!!!!!!!!')
     messages.scrollTop(scrollHeight)
   }
 }
 
 /* Socket Events */
-  socket.on('connect', function() {
-    console.log('connected to server')
-    
-    /* 
-      event emiter inside 'connect' callback because
-      we only want to emit the event when connected
-    */
-    // sends a message TO the server
-    // socket.emit('createMessage', {
-    //   from: 'Miguel',
-    //   text: 'Creating a message from the client'
-    // })
+socket.on('connect', function() {
+  console.log('connected to server')
+  const params = $.deparam(window.location.search)
+
+  socket.emit('join', params, function (err) {
+    if(err) {
+      alert(err)
+      window.location.href = '/'
+    } else {
+      console.log('No error')
+    }
   })
+  
+  /* 
+    event emiter inside 'connect' callback because
+    we only want to emit the event when connected
+  */
+  // sends a message TO the server
+  // socket.emit('createMessage', {
+  //   from: 'Miguel',
+  //   text: 'Creating a message from the client'
+  // })
+})
 socket.on('disconnect', function() {
   console.log('disconnected from server')
+})
+
+socket.on('updateUserList', function(users) {
+  const ol = $('<ol></ol>')
+
+  users.forEach(function(user) {
+    ol.append($('<li></li>').text(user))
+  })
+
+  $('#users').html(ol)
 })
 
 // handles a new message FROM the server
