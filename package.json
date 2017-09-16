@@ -10,7 +10,7 @@
     "test-watch": "nodemon --exec yarn test"
   },
   "engines": {
-    "node": "6.2.2"
+    "node": "8.2.1"
   },
   "dependencies": {
     "expect": "1.20.2",

@@ -1,5 +1,27 @@
 const socket = io()
 
+function scrollToBottom() {
+  // Selectors
+  const messages = $('#messages')
+  const newMessage = messages.children('li:last-child')
+  // Heights
+  /*
+    clientHeight - height of the viewport
+    scrolltop - how far has been scrolled from the top
+    scrollHeight - how far you can scroll
+  */
+  const clientHeight = messages.prop('clientHeight')
+  const scrollTop = messages.prop('scrollTop')
+  const scrollHeight = messages.prop('scrollHeight')
+  const newMessageHeight = newMessage.innerHeight()
+  const lastMessageHeight = newMessage.prev().innerHeight()
+
+  if(Math.round(clientHeight + scrollTop + lastMessageHeight) === scrollHeight) {
+    console.log('scroll down1!!!!!!!!!')
+    messages.scrollTop(scrollHeight)
+  }
+}
+
 /* Socket Events */
   socket.on('connect', function() {
     console.log('connected to server')
@@ -29,6 +51,7 @@ socket.on('newMessage', function(message) {
   })
 
   $('#messages').append(html) 
+  scrollToBottom()
 })
 
 socket.on('newLocationMessage', function(message) {
@@ -40,6 +63,8 @@ socket.on('newLocationMessage', function(message) {
     createdAt: formattedTime
   })
   $('#messages').append(html)
+
+  scrollToBottom()
 })
 
 
